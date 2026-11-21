@@ -1,15 +1,15 @@
 import type { ToolConfig, ToolTheme } from '@itsjust/core';
 
 const toolTheme: ToolTheme = {
-  brand: 'Base Converter',
-  accent: '#10b981',
+  brand: 'Text Statistics Counter',
+  accent: '#0ea5e9',
 };
 
 export const toolConfig: ToolConfig = {
-  id: '1795194271',
-  name: 'Base Converter',
+  id: 'tool-1795233873',
+  name: 'Text Statistics Counter',
   description:
-    'Convert numbers between binary, octal, decimal, hexadecimal and arbitrary bases 2-36 with live input and bit grouping.',
+    'Analyzes pasted text and shows live character, word, sentence, paragraph, and reading-time statistics with keyword frequency highlights.',
   version: '1.0.0',
   exportFormats: ['png', 'jpeg', 'webp', 'pdf'],
   features: {

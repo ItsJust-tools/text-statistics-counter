@@ -1,13 +1,9 @@
 'use client';
 
-import Link from 'next/link';
-
 export function ToolToolbar() {
   return (
     <div className="converter-toolbar">
-      <Link href="/help" className="toolbar-btn toolbar-help-link" aria-label="Open help page">
-        Help
-      </Link>
+      <span className="text-xs text-gray-500 dark:text-gray-400">Text Statistics Counter</span>
     </div>
   );
 }

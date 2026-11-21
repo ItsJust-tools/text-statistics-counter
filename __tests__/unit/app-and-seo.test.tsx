@@ -12,11 +12,10 @@ import { cn } from '@/lib/utils';
 import { generateJsonLd, generateToolMetadata } from '@/lib/seo';
 import toolConfig from '@/tool/tool.config';
 import { getPublicSiteUrl, templateMetadata } from '@/tool/template-metadata';
-import { baseConverterTool } from '@/tool/tool-definition';
-import { ToolCanvas } from '@/tool/components/tool-canvas';
-import { ToolSidebar } from '@/tool/components/tool-sidebar';
+import { textStatisticsTool } from '@/tool/tool-definition';
+import { ToolCanvas, ToolSidebar } from '@/tool/components/tool-canvas';
 import { ToolToolbar } from '@/tool/components/tool-toolbar';
-import { DEFAULT_STATE } from '@/tool/types';
+import { DEFAULT_STATE, DEFAULT_READING_WPM, DEFAULT_SPEAKING_WPM } from '@/tool/types';
 import type { ExporterLoader } from '@itsjust/core';
 
 vi.mock('next/link', () => ({
@@ -93,27 +92,22 @@ describe('app and seo', () => {
   it('covers tool definition and helper exports', async () => {
     expect(cn('a', undefined, 'b', false, null, 'c')).toBe('a b c');
     expect(getPublicSiteUrl()).toBe('http://localhost:3000');
-    expect(baseConverterTool.deserialize({ input: 'ff', inputBase: 16 })).toEqual({
+    expect(textStatisticsTool.deserialize({ text: 'Hello world' })).toEqual({
       success: true,
       data: {
-        input: 'ff',
-        inputBase: 16,
-        digitCase: 'lower',
-        grouping: 'none',
-        showTwosComplement: true,
-        bitLength: DEFAULT_STATE.bitLength,
+        text: 'Hello world',
+        readingWpm: DEFAULT_READING_WPM,
+        speakingWpm: DEFAULT_SPEAKING_WPM,
+        highlightedKeyword: null,
+        darkMode: false,
       },
     });
-    expect(baseConverterTool.deserialize({ nope: true })).toEqual({
+    expect(textStatisticsTool.deserialize({ nope: true })).toEqual({
       success: false,
-      error: 'Invalid data format: expected { input: string, inputBase: number (2-36), ... }',
+      error: 'Invalid data format: expected { text: string, ... }',
     });
-    expect(baseConverterTool.serialize({ ...DEFAULT_STATE, input: '11' })).toContain('"input":"11"');
-    expect(baseConverterTool.deserialize({ input: '11', inputBase: 10, digitCase: 'upper', grouping: 'byte', bitLength: 8 })).toEqual({
-      success: true,
-      data: { input: '11', inputBase: 10, digitCase: 'upper', grouping: 'byte', showTwosComplement: true, bitLength: 8 },
-    });
-    const exporters = (baseConverterTool as { exporters?: Array<{ loader: ExporterLoader }> }).exporters ?? [];
+    expect(textStatisticsTool.serialize({ ...DEFAULT_STATE, text: 'abc' })).toContain('"text":"abc"');
+    const exporters = (textStatisticsTool as { exporters?: Array<{ loader: ExporterLoader }> }).exporters ?? [];
     expect(exporters).toHaveLength(4);
     const first = exporters[0];
     expect(first).toBeDefined();
@@ -127,14 +121,13 @@ describe('app and seo', () => {
     render(
       <>
         <ToolToolbar />
-        <ToolSidebar text="ff" fontSize={16} onFontSizeChange={() => {}} />
-        <ToolCanvas state={{ ...DEFAULT_STATE, input: '255' }} fontSize={16} />
+        <ToolSidebar state={DEFAULT_STATE} onStateChange={() => {}} />
+        <ToolCanvas state={{ ...DEFAULT_STATE }} />
       </>
     );
 
-    expect(screen.getByRole('link', { name: 'Open help page' })).toBeInTheDocument();
-    expect(screen.getByText('2')).toBeInTheDocument(); // digit count for "ff"
-    expect(screen.getByRole('application', { name: 'Base converter canvas' })).toBeInTheDocument();
-    expect(screen.getByTestId('base-row-16')).toHaveTextContent('ff');
+    expect(screen.getByTestId('text-stats-sidebar')).toBeInTheDocument();
+    expect(screen.getByRole('application', { name: 'Text statistics canvas' })).toBeInTheDocument();
+    expect(screen.getByTestId('text-stats-canvas')).toBeInTheDocument();
   });
 });

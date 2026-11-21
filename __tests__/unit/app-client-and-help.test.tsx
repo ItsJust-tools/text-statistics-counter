@@ -38,7 +38,7 @@ vi.mock('@itsjust/core', () => ({
   ),
   useTool: () => ({
     state: {
-      data: { input: 'Hello', inputBase: 10, digitCase: 'lower', grouping: 'none', showTwosComplement: true, bitLength: 32 },
+      data: { text: 'Hello', readingWpm: 200, speakingWpm: 130, highlightedKeyword: null, darkMode: false },
       setData: mockSetData,
       isDirty: false,
       lastSaved: 'just now',
@@ -54,22 +54,22 @@ vi.mock('@itsjust/core', () => ({
 
 vi.mock('@/tool', () => ({
   toolConfig: {
-    id: '1795194271',
-    name: 'Base Converter',
+    id: 'tool-1795233873',
+    name: 'Text Statistics Counter',
     version: '1.0.0',
     features: { sidebar: true },
-    theme: { brand: 'Base Converter' },
+    theme: { brand: 'Text Statistics Counter' },
   },
   templateBaseVersion: '1.1.0',
-  ToolCanvas: ({ state }: { state: { input: string } }) => <div>canvas:{state.input}</div>,
+  ToolCanvas: ({ state }: { state: { text: string } }) => <div>canvas:{state.text}</div>,
   ToolToolbar: () => <div>toolbar</div>,
-  ToolSidebar: ({ text }: { text: string }) => <div>sidebar:{text}</div>,
+  ToolSidebar: ({ state }: { state: { text: string } }) => <div>sidebar:{state.text}</div>,
 }));
 
 vi.mock('@/tool/tool-definition', () => ({
-  baseConverterTool: {
+  textStatisticsTool: {
     serialize: (state: unknown) => JSON.stringify(state),
-    deserialize: () => ({ success: true, data: { input: 'From Shared Url', inputBase: 10 } }),
+    deserialize: () => ({ success: true, data: { text: 'From Shared Url', readingWpm: 200, speakingWpm: 130, highlightedKeyword: null, darkMode: false } }),
   },
 }));
 

@@ -18,13 +18,9 @@ import {
   ToolToolbar,
   ToolSidebar,
 } from '@/tool';
-import { baseConverterTool as baseConverterToolDef } from '@/tool/tool-definition';
+import { textStatisticsTool as toolDef } from '@/tool/tool-definition';
 import type { ToolState } from '@/tool/types';
 import { DEFAULT_STATE } from '@/tool/types';
-
-const DEFAULT_FONT_SIZE = 16;
-const MIN_FONT_SIZE = 8;
-const MAX_FONT_SIZE = 72;
 
 export default function ToolClient() {
   const ToolShellCompat = ToolShell as unknown as ComponentType<Record<string, unknown>> & {
@@ -35,7 +31,7 @@ export default function ToolClient() {
     StatusBar?: ComponentType<{ children?: ReactNode }>;
   };
   const canvasRef = useRef<HTMLDivElement>(null);
-  const tool = useTool<ToolState>(baseConverterToolDef, canvasRef);
+  const tool = useTool<ToolState>(toolDef, canvasRef);
   const setToolData = tool.state.setData;
   const showToast = tool.toast;
   const [isSharing, setIsSharing] = useState(false);
@@ -43,14 +39,14 @@ export default function ToolClient() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(
     () => typeof window !== 'undefined' && window.innerWidth > 768 && toolConfig.features.sidebar
   );
-  const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
 
   const title = toolConfig.name;
   const state = tool.state.data;
 
   useEffect(() => {
     document.title = title;
-  }, [title]);
+    document.documentElement.classList.toggle('dark', state.darkMode);
+  }, [title, state.darkMode]);
 
   const handleStateChange = useCallback(
     (updater: (prev: ToolState) => ToolState) => {
@@ -58,10 +54,6 @@ export default function ToolClient() {
     },
     [setToolData]
   );
-
-  const handleFontSizeChange = useCallback((delta: number) => {
-    setFontSize((prev) => Math.max(MIN_FONT_SIZE, Math.min(MAX_FONT_SIZE, prev + delta)));
-  }, []);
 
   useEffect(() => {
     if (hasLoadedSharedState.current) return;
@@ -73,7 +65,7 @@ export default function ToolClient() {
       const serialized = decompressFromEncodedURIComponent(encodedState);
       if (!serialized) throw new Error('Invalid shared URL');
       const parsed: unknown = JSON.parse(serialized);
-      const deserialized = baseConverterToolDef.deserialize(parsed);
+      const deserialized = toolDef.deserialize(parsed);
       if (!deserialized.success) throw new Error(deserialized.error);
       setToolData(deserialized.data);
       showToast('Loaded state from shared URL', 'success');
@@ -86,7 +78,7 @@ export default function ToolClient() {
   const handleShare = useCallback(async () => {
     setIsSharing(true);
     try {
-      const serialized = baseConverterToolDef.serialize(state);
+      const serialized = toolDef.serialize(state);
       const encodedState = compressToEncodedURIComponent(serialized);
       if (!encodedState) throw new Error('Failed to encode state for URL');
       const url = new URL(window.location.href);
@@ -115,7 +107,7 @@ export default function ToolClient() {
   }, [showToast, state, title]);
 
   const handleClear = useCallback(() => {
-    setToolData(() => ({ ...DEFAULT_STATE, input: '' }));
+    setToolData((prev) => ({ ...DEFAULT_STATE, darkMode: prev.darkMode }));
   }, [setToolData]);
 
   const toolbarContent = (
@@ -132,15 +124,12 @@ export default function ToolClient() {
     </>
   );
 
-  const sidebarContent = (
-    <ToolSidebar text={state.input} fontSize={fontSize} onFontSizeChange={handleFontSizeChange} />
-  );
+  const sidebarContent = <ToolSidebar state={state} onStateChange={handleStateChange} />;
 
   const canvasContent = (
     <ToolCanvas
       canvasRef={canvasRef}
       state={state}
-      fontSize={fontSize}
       onStateChange={handleStateChange}
       onClear={handleClear}
     />
@@ -162,8 +151,7 @@ export default function ToolClient() {
           'Ready'
         )}
       </span>
-      <span className="status-slot status-slot-font-size">{fontSize}px</span>
-      <span className="status-slot">Input base: {state.inputBase}</span>
+      <span className="status-slot">{state.text.trim().split(/\s+/).filter(Boolean).length} words</span>
       <span className="status-slot status-slot-tool-version">Tool v{toolConfig.version}</span>
       <span className="status-slot status-slot-template-version">
         Template v{templateBaseVersion}
@@ -211,7 +199,7 @@ export default function ToolClient() {
                 <BodySection>
                   <SidebarSection>{sidebarContent}</SidebarSection>
                   <CanvasSection>{canvasContent}</CanvasSection>
-                </BodySection>
+                  </BodySection>
                 <StatusBarSection>{statusBarContent}</StatusBarSection>
               </>
             );
