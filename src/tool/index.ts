@@ -18,14 +18,5 @@ export { Canvas } from './components/Canvas';
 export { Sidebar } from './components/Sidebar';
 export { Toolbar } from './components/Toolbar';
 export { SAMPLE_TEXT } from './components/Canvas';
-export type {
-  ToolState,
-  TextStatistics,
-  KeywordFrequency,
-  Formatting,
-} from './types';
-export {
-  DEFAULT_STATE,
-  DEFAULT_READING_WPM,
-  DEFAULT_SPEAKING_WPM,
-} from './types';
+export type { ToolState, TextStatistics, KeywordFrequency, Formatting } from './types';
+export { DEFAULT_STATE, DEFAULT_READING_WPM, DEFAULT_SPEAKING_WPM } from './types';

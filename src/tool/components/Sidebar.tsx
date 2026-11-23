@@ -49,17 +49,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ state, onChange }) => {
   const stats = React.useMemo(() => computeStatistics(state.text), [state.text]);
 
   return (
-    <div
-      className="space-y-5 overflow-y-auto h-full p-4 text-sm"
-      data-testid="text-stats-sidebar"
-    >
+    <div className="space-y-5 overflow-y-auto h-full p-4 text-sm" data-testid="text-stats-sidebar">
       <div>
         <h3 className="mb-2 font-medium text-gray-900 dark:text-gray-100">Quick word count</h3>
-        <p className="text-3xl font-semibold text-gray-900 dark:text-gray-100" data-testid="sidebar-word-count">
+        <p
+          className="text-3xl font-semibold text-gray-900 dark:text-gray-100"
+          data-testid="sidebar-word-count"
+        >
           {stats.wordCount.toLocaleString()}
         </p>
         <p className="text-xs text-gray-500 dark:text-gray-400">
-          {stats.charCount.toLocaleString()} characters · {stats.sentenceCount.toLocaleString()} sentences
+          {stats.charCount.toLocaleString()} characters · {stats.sentenceCount.toLocaleString()}{' '}
+          sentences
         </p>
       </div>
 

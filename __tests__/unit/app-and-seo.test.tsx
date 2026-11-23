@@ -106,8 +106,11 @@ describe('app and seo', () => {
       success: false,
       error: 'Invalid data format: expected { text: string, ... }',
     });
-    expect(textStatisticsTool.serialize({ ...DEFAULT_STATE, text: 'abc' })).toContain('"text":"abc"');
-    const exporters = (textStatisticsTool as { exporters?: Array<{ loader: ExporterLoader }> }).exporters ?? [];
+    expect(textStatisticsTool.serialize({ ...DEFAULT_STATE, text: 'abc' })).toContain(
+      '"text":"abc"'
+    );
+    const exporters =
+      (textStatisticsTool as { exporters?: Array<{ loader: ExporterLoader }> }).exporters ?? [];
     expect(exporters).toHaveLength(4);
     const first = exporters[0];
     expect(first).toBeDefined();

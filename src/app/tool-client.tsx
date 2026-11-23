@@ -11,13 +11,7 @@ import {
 } from 'react';
 import { ToolShell, useTool, ImportExport } from '@itsjust/core';
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
-import {
-  toolConfig,
-  templateBaseVersion,
-  ToolCanvas,
-  ToolToolbar,
-  ToolSidebar,
-} from '@/tool';
+import { toolConfig, templateBaseVersion, ToolCanvas, ToolToolbar, ToolSidebar } from '@/tool';
 import { textStatisticsTool as toolDef } from '@/tool/tool-definition';
 import type { ToolState } from '@/tool/types';
 import { DEFAULT_STATE } from '@/tool/types';
@@ -151,7 +145,9 @@ export default function ToolClient() {
           'Ready'
         )}
       </span>
-      <span className="status-slot">{state.text.trim().split(/\s+/).filter(Boolean).length} words</span>
+      <span className="status-slot">
+        {state.text.trim().split(/\s+/).filter(Boolean).length} words
+      </span>
       <span className="status-slot status-slot-tool-version">Tool v{toolConfig.version}</span>
       <span className="status-slot status-slot-template-version">
         Template v{templateBaseVersion}
@@ -199,7 +195,7 @@ export default function ToolClient() {
                 <BodySection>
                   <SidebarSection>{sidebarContent}</SidebarSection>
                   <CanvasSection>{canvasContent}</CanvasSection>
-                  </BodySection>
+                </BodySection>
                 <StatusBarSection>{statusBarContent}</StatusBarSection>
               </>
             );

@@ -160,7 +160,11 @@ describe('serialize/deserialize URL state', () => {
   });
 
   it('clamps out-of-range wpm values safely', () => {
-    const result = textStatisticsTool.deserialize({ text: 'hi', readingWpm: -50, speakingWpm: 99999 });
+    const result = textStatisticsTool.deserialize({
+      text: 'hi',
+      readingWpm: -50,
+      speakingWpm: 99999,
+    });
     expect(result.success).toBe(true);
     if (result.success) {
       expect(result.data.readingWpm).toBe(10);

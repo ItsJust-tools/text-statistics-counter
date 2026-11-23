@@ -11,11 +11,66 @@ import {
 } from './types';
 
 const STOP_WORDS = new Set([
-  'a', 'an', 'and', 'are', 'as', 'at', 'be', 'but', 'by', 'for', 'from', 'had', 'has', 'have',
-  'he', 'her', 'here', 'his', 'i', 'if', 'in', 'into', 'is', 'it', 'its', 'just', 'me', 'my',
-  'no', 'not', 'of', 'on', 'or', 'our', 'she', 'so', 'some', 'that', 'the', 'their', 'them',
-  'then', 'there', 'these', 'they', 'this', 'to', 'up', 'was', 'we', 'were', 'what', 'when',
-  'which', 'who', 'will', 'with', 'would', 'you', 'your',
+  'a',
+  'an',
+  'and',
+  'are',
+  'as',
+  'at',
+  'be',
+  'but',
+  'by',
+  'for',
+  'from',
+  'had',
+  'has',
+  'have',
+  'he',
+  'her',
+  'here',
+  'his',
+  'i',
+  'if',
+  'in',
+  'into',
+  'is',
+  'it',
+  'its',
+  'just',
+  'me',
+  'my',
+  'no',
+  'not',
+  'of',
+  'on',
+  'or',
+  'our',
+  'she',
+  'so',
+  'some',
+  'that',
+  'the',
+  'their',
+  'them',
+  'then',
+  'there',
+  'these',
+  'they',
+  'this',
+  'to',
+  'up',
+  'was',
+  'we',
+  'were',
+  'what',
+  'when',
+  'which',
+  'who',
+  'will',
+  'with',
+  'would',
+  'you',
+  'your',
 ]);
 
 function normalizeWpm(value: unknown, fallback: number): number {
@@ -89,7 +144,11 @@ export function computeKeywords(text: string, limit = 15): KeywordFrequency[] {
 }
 
 /** Reading and speaking time for the state's word count and wpm settings. */
-export function computeFormatting(text: string, readingWpm: number, speakingWpm: number): Formatting {
+export function computeFormatting(
+  text: string,
+  readingWpm: number,
+  speakingWpm: number
+): Formatting {
   const words = tokenizeWords(text).length;
   const wpmR = normalizeWpm(readingWpm, DEFAULT_READING_WPM);
   const wpmS = normalizeWpm(speakingWpm, DEFAULT_SPEAKING_WPM);
@@ -110,7 +169,10 @@ export const textStatisticsTool: Tool<ToolState> = {
   serialize: (state) => JSON.stringify(state),
   deserialize: (data): DeserializeResult<ToolState> => {
     if (typeof data !== 'object' || data === null) {
-      return { success: false, error: 'Invalid data format: expected text statistics state object' };
+      return {
+        success: false,
+        error: 'Invalid data format: expected text statistics state object',
+      };
     }
     const v = data as Partial<ToolState>;
     if (typeof v.text !== 'string') {
@@ -122,7 +184,10 @@ export const textStatisticsTool: Tool<ToolState> = {
         text: v.text,
         readingWpm: normalizeWpm(v.readingWpm, DEFAULT_READING_WPM),
         speakingWpm: normalizeWpm(v.speakingWpm, DEFAULT_SPEAKING_WPM),
-        highlightedKeyword: typeof v.highlightedKeyword === 'string' && v.highlightedKeyword.trim() ? v.highlightedKeyword : null,
+        highlightedKeyword:
+          typeof v.highlightedKeyword === 'string' && v.highlightedKeyword.trim()
+            ? v.highlightedKeyword
+            : null,
         darkMode: typeof v.darkMode === 'boolean' ? v.darkMode : DEFAULT_STATE.darkMode,
       },
     };

@@ -91,8 +91,12 @@ export const Canvas: React.FC<CanvasProps> = ({ state, onChange, onClear }) => {
             key={card.label}
             className="stat-card rounded-md border border-gray-200 bg-white px-3 py-2 text-center dark:border-gray-800 dark:bg-gray-900"
           >
-            <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">{card.value}</div>
-            <div className="text-[11px] leading-tight text-gray-500 dark:text-gray-400">{card.label}</div>
+            <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              {card.value}
+            </div>
+            <div className="text-[11px] leading-tight text-gray-500 dark:text-gray-400">
+              {card.label}
+            </div>
           </div>
         ))}
       </div>
@@ -163,7 +167,10 @@ export const Canvas: React.FC<CanvasProps> = ({ state, onChange, onClear }) => {
       </div>
 
       {keywords.length > 0 ? (
-        <div data-testid="keyword-table" className="rounded-md border border-gray-200 dark:border-gray-800">
+        <div
+          data-testid="keyword-table"
+          className="rounded-md border border-gray-200 dark:border-gray-800"
+        >
           <h3 className="border-b border-gray-200 px-3 py-2 text-xs font-medium text-gray-500 dark:border-gray-800 dark:text-gray-400">
             Top keywords (stop words excluded) — click to highlight
           </h3>
@@ -179,7 +186,9 @@ export const Canvas: React.FC<CanvasProps> = ({ state, onChange, onClear }) => {
                 <tr
                   key={kw.word}
                   className={`cursor-pointer border-t border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800 ${
-                    state.highlightedKeyword?.toLowerCase() === kw.word ? 'bg-yellow-100 dark:bg-yellow-900/40' : ''
+                    state.highlightedKeyword?.toLowerCase() === kw.word
+                      ? 'bg-yellow-100 dark:bg-yellow-900/40'
+                      : ''
                   }`}
                   onClick={() =>
                     onChange({
@@ -189,7 +198,9 @@ export const Canvas: React.FC<CanvasProps> = ({ state, onChange, onClear }) => {
                     })
                   }
                 >
-                  <td className="px-3 py-1.5 font-medium text-gray-900 dark:text-gray-100">{kw.word}</td>
+                  <td className="px-3 py-1.5 font-medium text-gray-900 dark:text-gray-100">
+                    {kw.word}
+                  </td>
                   <td className="px-3 py-1.5 text-gray-700 dark:text-gray-300">{kw.count}</td>
                 </tr>
               ))}

@@ -1,9 +1,4 @@
-import type { ToolConfig, ToolTheme } from '@itsjust/core';
-
-const toolTheme: ToolTheme = {
-  brand: 'Text Statistics Counter',
-  accent: '#0ea5e9',
-};
+import type { ToolConfig } from '@itsjust/core';
 
 export const toolConfig: ToolConfig = {
   id: 'tool-1795233873',
@@ -20,7 +15,13 @@ export const toolConfig: ToolConfig = {
     statusBar: true,
     darkMode: true,
   },
-  theme: toolTheme,
+  theme: {
+    accent: '#0ea5e9',
+    accentHover: '#0284c7',
+    accentSubtle: 'rgba(14, 165, 233, 0.12)',
+    brand: 'Text Statistics Counter',
+    icon: '\u{1F4CA}',
+  },
 };
 
 export default toolConfig;

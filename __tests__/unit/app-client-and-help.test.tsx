@@ -38,7 +38,13 @@ vi.mock('@itsjust/core', () => ({
   ),
   useTool: () => ({
     state: {
-      data: { text: 'Hello', readingWpm: 200, speakingWpm: 130, highlightedKeyword: null, darkMode: false },
+      data: {
+        text: 'Hello',
+        readingWpm: 200,
+        speakingWpm: 130,
+        highlightedKeyword: null,
+        darkMode: false,
+      },
       setData: mockSetData,
       isDirty: false,
       lastSaved: 'just now',
@@ -69,7 +75,16 @@ vi.mock('@/tool', () => ({
 vi.mock('@/tool/tool-definition', () => ({
   textStatisticsTool: {
     serialize: (state: unknown) => JSON.stringify(state),
-    deserialize: () => ({ success: true, data: { text: 'From Shared Url', readingWpm: 200, speakingWpm: 130, highlightedKeyword: null, darkMode: false } }),
+    deserialize: () => ({
+      success: true,
+      data: {
+        text: 'From Shared Url',
+        readingWpm: 200,
+        speakingWpm: 130,
+        highlightedKeyword: null,
+        darkMode: false,
+      },
+    }),
   },
 }));
 
